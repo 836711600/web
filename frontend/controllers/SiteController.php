@@ -149,6 +149,13 @@ class SiteController extends Controller
     public function actionSignup()
     {
         $model = new SignupForm();
+
+        if (Yii::$app->request->isAjax) {
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            $model->load($_POST);
+            return \yii\bootstrap\ActiveForm::validate($model);
+        }
+
         if ($model->load(Yii::$app->request->post())) {
             if ($user = $model->signup()) {
                 if (Yii::$app->getUser()->login($user)) {

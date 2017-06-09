@@ -12,6 +12,7 @@ class SignupForm extends Model
     public $username;
     public $email;
     public $password;
+    public $password_compare;
 
 
     /**
@@ -22,17 +23,18 @@ class SignupForm extends Model
         return [
             ['username', 'trim'],
             ['username', 'required'],
-            ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This username has already been taken.'],
+            ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => '用户名已存在'],
             ['username', 'string', 'min' => 2, 'max' => 255],
 
             ['email', 'trim'],
             ['email', 'required'],
             ['email', 'email'],
             ['email', 'string', 'max' => 255],
-            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This email address has already been taken.'],
+            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => '此邮箱已被占用'],
 
-            ['password', 'required'],
-            ['password', 'string', 'min' => 6],
+            [['password', 'password_compare'], 'required'],
+            [['password', 'password_compare'], 'string', 'min' => 6,'message' => '{attribute}至少为6位'],
+            ['password_compare', 'compare', 'compareAttribute' => 'password', 'message' => '两次输入密码不一致'],
         ];
     }
 
